@@ -5,7 +5,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn -x package -Pnative -DskipTests
+RUN mvn -X package -Pnative -DskipTests
 
 # Estágio 2: Imagem final com Debian Slim - leve e comprovadamente compatível
 # Usamos debian:12-slim porque provamos durante a depuração que ela contém todas as libs necessárias.
