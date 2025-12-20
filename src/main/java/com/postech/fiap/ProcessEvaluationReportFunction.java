@@ -1,13 +1,19 @@
 package com.postech.fiap;
 
+import com.postech.fiap.usecase.GenerateReportUseCase;
 import io.quarkus.funqy.Funq;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
 @ApplicationScoped
 public class ProcessEvaluationReportFunction {
+
+    @Inject
+    GenerateReportUseCase generateReportUseCase;
 
     private static final Logger LOGGER = Logger.getLogger(ProcessEvaluationReportFunction.class.getName());
 
@@ -23,11 +29,9 @@ public class ProcessEvaluationReportFunction {
     }
 
     @Funq("scheduledReport")
-    public void scheduledReport(PubSubMessage message) {
+    public void scheduledReport(PubSubMessage message) throws IOException {
         LOGGER.info("Scheduler trigger received. Message ID: " + message.message.data);
-        // The message payload can be ignored if the function is just a periodic trigger.
-        // Add your scheduled task logic here. For example, generating a report.
-        // E.g., generateReportUseCase.execute();
+        generateReportUseCase.processAndSend();
         LOGGER.info("Scheduled task finished.");
     }
 }
