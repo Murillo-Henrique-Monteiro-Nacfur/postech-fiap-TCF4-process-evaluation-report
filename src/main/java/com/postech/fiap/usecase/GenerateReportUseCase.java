@@ -26,8 +26,8 @@ public class GenerateReportUseCase {
     GenerateCsvReportService generateCsvReportService;
     @Inject
     GenerateEmailReportService generateEmailReportService;
-    @Inject
-    PubSubService pubSubService;
+//    @Inject
+//    PubSubService pubSubService;
     @Inject
     ObjectMapper objectMapper;
 
@@ -38,7 +38,7 @@ public class GenerateReportUseCase {
 
             String jsonMessage = objectMapper.writeValueAsString(emailRequestDto);
 
-            pubSubService.publishMessage("topic-email-sender", jsonMessage);
+//            pubSubService.publishMessage("topic-email-sender", jsonMessage);
         } catch (Exception e) {
             throw new IOException("Falha ao enviar mensagem para o tópico", e);
         }
