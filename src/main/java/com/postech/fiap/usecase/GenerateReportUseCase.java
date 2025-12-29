@@ -74,6 +74,7 @@ public class GenerateReportUseCase {
         var objectName = gcsUploadService.uploadFile(bucketName, fileName, generateCSV, "report.csv");
         var emailsToSend = getEmailsToSendReport();
 
+
         AttachmentDto attachment = new AttachmentDto(bucketName, fileName + ".csv");
 
         return new EmailRequestDto(
