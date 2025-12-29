@@ -14,6 +14,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @ApplicationScoped
 public class PubSubProducers {
@@ -25,8 +26,10 @@ public class PubSubProducers {
     @Produces
     @ApplicationScoped
     public Publisher userEventsPublisher() throws IOException {
-        TopicName topicName = TopicName.of(projectId, "user-events");
-        GoogleCredentialsProvider credentialsProvider = GoogleCredentialsProvider.newBuilder().build();
+        TopicName topicName = TopicName.of(projectId, "topic-email-sender");
+        GoogleCredentialsProvider credentialsProvider = GoogleCredentialsProvider.newBuilder()
+                .setScopesToApply(Collections.singletonList("https://www.googleapis.com/auth/pubsub"))
+                .build();
         return Publisher.newBuilder(topicName)
                 .setCredentialsProvider(credentialsProvider)
                 .build();
@@ -37,7 +40,9 @@ public class PubSubProducers {
     public Subscriber userEventsSubscriber(MessageReceiver receiver) {
         ProjectSubscriptionName subName =
                 ProjectSubscriptionName.of(projectId,  "topic-email-sender");
-        GoogleCredentialsProvider credentialsProvider = GoogleCredentialsProvider.newBuilder().build();
+        GoogleCredentialsProvider credentialsProvider = GoogleCredentialsProvider.newBuilder()
+                .setScopesToApply(Collections.singletonList("https://www.googleapis.com/auth/pubsub"))
+                .build();
         return Subscriber.newBuilder(subName, receiver)
                 .setCredentialsProvider(credentialsProvider)
                 .build();
