@@ -1,8 +1,8 @@
 package com.postech.fiap.dto;
 
-import org.hibernate.internal.build.AllowReflection;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
-@AllowReflection
+@RegisterForReflection
 public class AttachmentDto {
     private String bucket;
     private String nameFile;

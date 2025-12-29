@@ -1,10 +1,10 @@
 package com.postech.fiap.dto;
 
-import org.hibernate.internal.build.AllowReflection;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.List;
 
-@AllowReflection
+@RegisterForReflection
 public class EmailRequestDto {
     private List<String> destinations;
     private String message;
