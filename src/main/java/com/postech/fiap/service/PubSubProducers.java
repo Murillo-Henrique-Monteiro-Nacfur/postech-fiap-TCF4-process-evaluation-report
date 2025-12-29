@@ -36,7 +36,7 @@ public class PubSubProducers {
     @ApplicationScoped
     public Subscriber userEventsSubscriber(MessageReceiver receiver) {
         ProjectSubscriptionName subName =
-                ProjectSubscriptionName.of(projectId, "topic-email-sender");
+                ProjectSubscriptionName.of(projectId,  "topic-email-sender");
         GoogleCredentialsProvider credentialsProvider = GoogleCredentialsProvider.newBuilder().build();
         return Subscriber.newBuilder(subName, receiver)
                 .setCredentialsProvider(credentialsProvider)
