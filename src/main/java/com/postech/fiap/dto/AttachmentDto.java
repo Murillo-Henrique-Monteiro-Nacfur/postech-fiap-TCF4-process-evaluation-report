@@ -1,5 +1,8 @@
 package com.postech.fiap.dto;
 
+import org.hibernate.internal.build.AllowReflection;
+
+@AllowReflection
 public class AttachmentDto {
     private String bucket;
     private String nameFile;
