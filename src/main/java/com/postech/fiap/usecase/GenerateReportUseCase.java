@@ -1,6 +1,9 @@
 package com.postech.fiap.usecase;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.cloud.pubsub.v1.Publisher;
+import com.google.protobuf.ByteString;
+import com.google.pubsub.v1.PubsubMessage;
 import com.postech.fiap.dto.AttachmentDto;
 import com.postech.fiap.dto.EmailRequestDto;
 import com.postech.fiap.model.AdministratorEntity;
@@ -8,7 +11,6 @@ import com.postech.fiap.model.EvaluationEntity;
 import com.postech.fiap.service.GenerateCsvReportService;
 import com.postech.fiap.service.GenerateEmailReportService;
 import com.postech.fiap.service.GoogleStorageService;
-import com.postech.fiap.service.PubSubService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -26,8 +28,9 @@ public class GenerateReportUseCase {
     GenerateCsvReportService generateCsvReportService;
     @Inject
     GenerateEmailReportService generateEmailReportService;
-//    @Inject
-//    PubSubService pubSubService;
+    @Inject
+    Publisher userEventsPublisher;
+
     @Inject
     ObjectMapper objectMapper;
 
@@ -38,7 +41,13 @@ public class GenerateReportUseCase {
 
             String jsonMessage = objectMapper.writeValueAsString(emailRequestDto);
 
-//            pubSubService.publishMessage("topic-email-sender", jsonMessage);
+            ByteString data = ByteString.copyFromUtf8(jsonMessage);
+
+            PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
+                    .setData(data)
+                    .build();
+
+            userEventsPublisher.publish(pubsubMessage).get();
         } catch (Exception e) {
             throw new IOException("Falha ao enviar mensagem para o tópico", e);
         }
