@@ -71,7 +71,7 @@ public class GenerateReportUseCase {
         var emailsToSend = getEmailsToSendReport();
 
 
-        AttachmentDto attachment = new AttachmentDto(bucketName, fileName + ".csv");
+        AttachmentDto attachment = new AttachmentDto(bucketName, fileName);
 
         return new EmailRequestDto(
                 emailsToSend,
