@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class GenerateEmailReportService {
         StringBuilder report = new StringBuilder();
         report.append("Relatório de Avaliações:\n\n");
         report.append("Quantidade de avaliações por dia:\n");
-        evaluationsPerDay.forEach((date, count) -> report.append("- ").append(date).append(": ").append(count).append("\n"));
+        evaluationsPerDay.forEach((date, count) -> report.append("- ").append(date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).append(": ").append(count).append("\n"));
 
         report.append("\nQuantidade de avaliações por urgência:\n");
         evaluationsByUrgency.forEach((urgency, count) -> report.append("- ").append(urgency).append(": ").append(count).append("\n"));
