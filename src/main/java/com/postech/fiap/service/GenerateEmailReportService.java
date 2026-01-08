@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 public class GenerateEmailReportService {
 
     public String generateReport(List<EvaluationEntity> evaluations) {
+        Integer medEvaluations = evaluations.stream().mapToInt(EvaluationEntity::getRating).sum() / evaluations.size();
+
         Map<LocalDate, Long> evaluationsPerDay = evaluations.stream()
                 .collect(Collectors.groupingBy(evaluation -> evaluation.getDateHourCriation().toLocalDate(), Collectors.counting()));
 
@@ -25,6 +27,7 @@ public class GenerateEmailReportService {
 
         report.append("\nQuantidade de avaliações por urgência:\n");
         evaluationsByUrgency.forEach((urgency, count) -> report.append("- ").append(urgency).append(": ").append(count).append("\n"));
+        report.append("\nMédia de avaliações: ").append(medEvaluations);
 
         return report.toString();
     }
