@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ApplicationScoped
@@ -66,7 +67,7 @@ public class GenerateReportUseCase {
         var generateCSV = generateCsvReportService.generateCSV(evaluationsInLastWeek);
         var emailMessage = generateEmailReportService.generateReport(evaluationsInLastWeek);
         var bucketName = "report-bucket-techfiap";
-        var fileName = "Report-" + LocalDateTime.now() + ".csv";
+        var fileName = "Report-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".csv";
         var objectName = gcsUploadService.uploadFile(bucketName, fileName, generateCSV, "report.csv");
         var emailsToSend = getEmailsToSendReport();
 
@@ -76,7 +77,7 @@ public class GenerateReportUseCase {
         return new EmailRequestDto(
                 emailsToSend,
                 emailMessage,
-                "Relatório Semanal de Avaliações - " + LocalDateTime.now().toLocalDate(),
+                "Relatório Semanal de Avaliações - " + LocalDateTime.now().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 attachment
         );
     }

@@ -3,6 +3,8 @@ package com.postech.fiap.service;
 import com.postech.fiap.model.EvaluationEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +14,9 @@ import java.util.stream.Collectors;
 public class GenerateEmailReportService {
 
     public String generateReport(List<EvaluationEntity> evaluations) {
-        Integer medEvaluations = evaluations.stream().mapToInt(EvaluationEntity::getRating).sum() / evaluations.size();
+        BigDecimal sum = BigDecimal.valueOf(evaluations.stream().mapToInt(EvaluationEntity::getRating).sum());
+        BigDecimal avg = sum.divide(BigDecimal.valueOf(evaluations.size()), 2, RoundingMode.HALF_UP);
+        Integer medEvaluations = avg.compareTo(BigDecimal.valueOf(5.5)) > 0 ? 6 : 5;
 
         Map<LocalDate, Long> evaluationsPerDay = evaluations.stream()
                 .collect(Collectors.groupingBy(evaluation -> evaluation.getDateHourCriation().toLocalDate(), Collectors.counting()));
