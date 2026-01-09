@@ -67,7 +67,7 @@ public class GenerateReportUseCase {
         var generateCSV = generateCsvReportService.generateCSV(evaluationsInLastWeek);
         var emailMessage = generateEmailReportService.generateReport(evaluationsInLastWeek);
         var bucketName = "report-bucket-techfiap";
-        var fileName = "Report-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ".csv";
+        var fileName = "Report-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + ".csv";
         var objectName = gcsUploadService.uploadFile(bucketName, fileName, generateCSV, "report.csv");
         var emailsToSend = getEmailsToSendReport();
 
